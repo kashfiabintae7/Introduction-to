@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Perimeter Calculator</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-color: lightgoldenrodyellow;
+      }
+
+      .calculator {
+        background-color: rgb(248, 241, 175);
+        padding: 50px;
+        border-radius: 8px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.656);
+        text-align: center;
+      }
+
+      h2 {
+        margin-bottom: 20px;
+        color: darkslategray;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: darkkhaki;
+        font-weight: bold;
+      }
+
+      input[type="number"] {
+        width: calc(100% - 12px);
+        padding: 8px;
+        border: 1px solid darkgray;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: rgb(126, 192, 190);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: darkcyan;
+      }
+
+      #result {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: bold;
+        color: mediumturquoise;
+      }
+
+      select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid lightsteelblue;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-bottom: 15px;
+      }
+
+      .shape-inputs > div {
+        margin-bottom: 10px;
+      }
+
+      .shape-inputs {
+        margin-bottom: 20px;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <h2>Perimeter Calculator</h2>
+
+      <div class="input-group">
+        <label for="shape-select">Select Shape:</label>
+        <select id="shape-select">
+          <option value="">-- Select a Shape --</option>
+          <option value="triangle">Triangle</option>
+          <option value="rectangle">Rectangle</option>
+          <option value="square">Square</option>
+          <option value="pentagon">Pentagon</option>
+          <option value="hexagon">Hexagon</option>
+          <option value="custom">Custom Sides</option>
+        </select>
+      </div>
+
+      <div id="shape-inputs" class="shape-inputs">
+        <div id="triangle-inputs" class="hidden">
+          <label for="triangle-side1">Side 1:</label>
+          <input type="number" id="triangle-side1" /><br />
+          <label for="triangle-side2">Side 2:</label>
+          <input type="number" id="triangle-side2" /><br />
+          <label for="triangle-side3">Side 3:</label>
+          <input type="number" id="triangle-side3" />
+        </div>
+
+        <div id="rectangle-inputs" class="hidden">
+          <label for="rectangle-length">Length:</label>
+          <input type="number" id="rectangle-length" /><br />
+          <label for="rectangle-width">Width:</label>
+          <input type="number" id="rectangle-width" />
+        </div>
+
+        <div id="square-inputs" class="hidden">
+          <label for="square-side">Side Length:</label>
+          <input type="number" id="square-side" />
+        </div>
+
+        <div id="pentagon-inputs" class="hidden">
+          <label for="pentagon-side">Side Length:</label>
+          <input type="number" id="pentagon-side" />
+        </div>
+
+        <div id="hexagon-inputs" class="hidden">
+          <label for="hexagon-side">Side Length:</label>
+          <input type="number" id="hexagon-side" />
+        </div>
+
+        <div id="custom-inputs" class="hidden">
+          <label for="num-custom-sides">Number of Sides:</label>
+          <input type="number" id="num-custom-sides" min="3" value="3" /><br />
+          <div id="custom-side-lengths">
+            <label for="custom-side1">Side 1:</label>
+            <input type="number" id="custom-side1" /><br />
+            <label for="custom-side2">Side 2:</label>
+            <input type="number" id="custom-side2" /><br />
+            <label for="custom-side3">Side 3:</label>
+            <input type="number" id="custom-side3" />
+          </div>
+        </div>
+      </div>
+
+      <button onclick="calculatePerimeter()">Calculate Perimeter</button>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      const shapeSelect = document.getElementById("shape-select");
+      const shapeInputsDiv = document.getElementById("shape-inputs");
+      const triangleInputs = document.getElementById("triangle-inputs");
+      const rectangleInputs = document.getElementById("rectangle-inputs");
+      const squareInputs = document.getElementById("square-inputs");
+      const pentagonInputs = document.getElementById("pentagon-inputs");
+      const hexagonInputs = document.getElementById("hexagon-inputs");
+      const customInputs = document.getElementById("custom-inputs");
+      const numCustomSidesInput = document.getElementById("num-custom-sides");
+      const customSideLengthsDiv = document.getElementById(
+        "custom-side-lengths"
+      );
+      const resultDiv = document.getElementById("result");
+
+      shapeSelect.addEventListener("change", function () {
+        triangleInputs.classList.add("hidden");
+        rectangleInputs.classList.add("hidden");
+        squareInputs.classList.add("hidden");
+        pentagonInputs.classList.add("hidden");
+        hexagonInputs.classList.add("hidden");
+        customInputs.classList.add("hidden");
+
+        const selectedShape = this.value;
+        if (selectedShape === "triangle") {
+          triangleInputs.classList.remove("hidden");
+        } else if (selectedShape === "rectangle") {
+          rectangleInputs.classList.remove("hidden");
+        } else if (selectedShape === "square") {
+          squareInputs.classList.remove("hidden");
+        } else if (selectedShape === "pentagon") {
+          pentagonInputs.classList.remove("hidden");
+        } else if (selectedShape === "hexagon") {
+          hexagonInputs.classList.remove("hidden");
+        } else if (selectedShape === "custom") {
+          customInputs.classList.remove("hidden");
+        }
+      });
+
+      numCustomSidesInput.addEventListener("change", function () {
+        const numSides = parseInt(this.value);
+        if (numSides >= 3) {
+          generateCustomSideInputs(numSides);
+        } else {
+          customSideLengthsDiv.innerHTML =
+            '<p style="color: red;">Please enter a number of sides greater than or equal to 3.</p>';
+        }
+      });
+
+      function generateCustomSideInputs(numSides) {
+        customSideLengthsDiv.innerHTML = "";
+        for (let i = 1; i <= numSides; i++) {
+          const label = document.createElement("label");
+          label.setAttribute("for", `custom-side${i}`);
+          label.textContent = `Side ${i}:`;
+          const input = document.createElement("input");
+          input.type = "number";
+          input.id = `custom-side${i}`;
+          customSideLengthsDiv.appendChild(label);
+          customSideLengthsDiv.appendChild(input);
+          customSideLengthsDiv.appendChild(document.createElement("br"));
+        }
+      }
+
+      generateCustomSideInputs(3);
+
+      function calculatePerimeter() {
+        const selectedShape = shapeSelect.value;
+        let perimeter = 0;
+        let isValid = true;
+
+        if (selectedShape === "triangle") {
+          const side1 = parseFloat(
+            document.getElementById("triangle-side1").value
+          );
+          const side2 = parseFloat(
+            document.getElementById("triangle-side2").value
+          );
+          const side3 = parseFloat(
+            document.getElementById("triangle-side3").value
+          );
+          if (!isNaN(side1) && !isNaN(side2) && !isNaN(side3)) {
+            perimeter = side1 + side2 + side3;
+          } else {
+            isValid = false;
+          }
+        } else if (selectedShape === "rectangle") {
+          const length = parseFloat(
+            document.getElementById("rectangle-length").value
+          );
+          const width = parseFloat(
+            document.getElementById("rectangle-width").value
+          );
+          if (!isNaN(length) && !isNaN(width)) {
+            perimeter = 2 * (length + width);
+          } else {
+            isValid = false;
+          }
+        } else if (selectedShape === "square") {
+          const side = parseFloat(document.getElementById("square-side").value);
+          if (!isNaN(side)) {
+            perimeter = 4 * side;
+          } else {
+            isValid = false;
+          }
+        } else if (selectedShape === "pentagon") {
+          const side = parseFloat(
+            document.getElementById("pentagon-side").value
+          );
+          if (!isNaN(side)) {
+            perimeter = 5 * side;
+          } else {
+            isValid = false;
+          }
+        } else if (selectedShape === "hexagon") {
+          const side = parseFloat(
+            document.getElementById("hexagon-side").value
+          );
+          if (!isNaN(side)) {
+            perimeter = 6 * side;
+          } else {
+            isValid = false;
+          }
+        } else if (selectedShape === "custom") {
+          const numSides = parseInt(numCustomSidesInput.value);
+          for (let i = 1; i <= numSides; i++) {
+            const sideInput = document.getElementById(`custom-side${i}`);
+            if (sideInput && sideInput.value) {
+              perimeter += parseFloat(sideInput.value);
+            } else {
+              isValid = false;
+              break;
+            }
+          }
+          if (numSides < 3) {
+            isValid = false;
+          }
+        } else {
+          resultDiv.textContent = "Please select a shape.";
+          return;
+        }
+
+        if (isValid) {
+          resultDiv.textContent = `The perimeter is: ${perimeter}`;
+        } else {
+          resultDiv.textContent = "Please enter valid side lengths.";
+        }
+      }
+    </script>
+  </body>
+</html>
